@@ -135,6 +135,10 @@ result.innerHTML = `
     <strong>Ministry Team Volunteer Assignments</strong>
     <div>${assignmentCount ?? "Not available"} assignments retrieved</div>
     <div>${pagesFetched ?? 0} pages fetched</div>
+    <div style="margin-top:8px;">
+  <strong>Available Assignment Fields:</strong>
+  <div>${availableFields.join(", ") || "None found"}</div>
+</div>
     <div>Service date: ${assignmentPlanDate}</div>
     ${morePages ? "<div>More pages remain</div>" : ""}
   </div>
