@@ -128,18 +128,13 @@ if (team.id === "1770310") {
       );
     }
 
-    const assignments = await assignmentsResponse.json();
-
-    console.log(team.assignmentTest = {
+   team.assignmentTest = {
   planId: firstPlan.id,
   recordsReturned: assignments.data?.length ?? 0,
   responseStatuses: (assignments.data || []).map((member) => ({
     status: member.attributes.status || "unknown"
   }))
-};, {
-      planId: firstPlan.id,
-      recordsReturned: assignments.data?.length ?? 0
-    });
+};
   }
 }
     return {
