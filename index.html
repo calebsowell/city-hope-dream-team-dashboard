@@ -100,9 +100,24 @@ async function testPlanningCenterConnection() {
 
     const data = await response.json();
 
-    result.textContent = response.ok
-      ? "Connected successfully to Planning Center!"
-      : `Connection error: ${data.error || response.status}`;
+    if (response.ok) {
+  const counts = data.planCounts || [];
+
+  result.innerHTML = `
+    <strong>Planning Center Connected!</strong>
+    <div style="margin-top:10px;">
+      ${counts.map(team => `
+        <div style="margin-bottom:8px;">
+          <strong>${team.team}</strong>
+          <div>${team.count} plans retrieved</div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+} else {
+  result.textContent =
+    `Connection error: ${data.error || response.status}`;
+}
 
   } catch (error) {
     result.textContent = "Connection test failed.";
