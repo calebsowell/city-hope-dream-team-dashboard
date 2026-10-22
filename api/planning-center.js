@@ -127,7 +127,7 @@ if (team.id === "1770310") {
         `Volunteer assignments request failed: ${assignmentsResponse.status}`
       );
     }
-
+const assignments = await assignmentsResponse.json();
    team.assignmentTest = {
   planId: firstPlan.id,
   recordsReturned: assignments.data?.length ?? 0,
