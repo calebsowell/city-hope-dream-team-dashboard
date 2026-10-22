@@ -172,6 +172,7 @@ team.assignmentTest = {
   recordsReturned: allAssignments.length,
   pagesFetched,
   hasMorePages: Boolean(nextPage),
+  availableFields: Object.keys(allAssignments[0]?.attributes || {}),
   responseStatuses: allAssignments.map((member) => ({
     status: member.attributes?.status || "unknown"
   }))
