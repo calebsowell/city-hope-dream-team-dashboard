@@ -128,11 +128,38 @@ if (team.id === "1770310") {
       );
     }
 const assignments = await assignmentsResponse.json();
-   team.assignmentTest = {
+let allAssignments = assignments.data || [];
+let nextPage = assignments.links?.next || null;
+let pagesFetched = 1;
+
+while (nextPage && pagesFetched < 20) {
+  const nextResponse = await fetch(nextPage, {
+    headers: {
+      Authorization: `Basic ${credentials}`,
+      Accept: "application/json"
+    }
+  });
+
+  if (!nextResponse.ok) {
+    throw new Error(
+      `Assignments pagination failed: ${nextResponse.status}`
+    );
+  }
+
+  const nextData = await nextResponse.json();
+
+  allAssignments = allAssignments.concat(nextData.data || []);
+  nextPage = nextData.links?.next || null;
+  pagesFetched++;
+}
+
+team.assignmentTest = {
   planId: firstPlan.id,
-  recordsReturned: assignments.data?.length ?? 0,
-  responseStatuses: (assignments.data || []).map((member) => ({
-    status: member.attributes.status || "unknown"
+  recordsReturned: allAssignments.length,
+  pagesFetched,
+  hasMorePages: Boolean(nextPage),
+  responseStatuses: allAssignments.map((member) => ({
+    status: member.attributes?.status || "unknown"
   }))
 };
   }
