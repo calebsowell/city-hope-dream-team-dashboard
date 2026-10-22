@@ -113,7 +113,7 @@ if (team.id === "1770310") {
 
   if (firstPlan) {
     const assignmentsResponse = await fetch(
-      `https://api.planningcenteronline.com/services/v2/service_types/${team.id}/plans/${firstPlan.id}/team_members?per_page=1`,
+      `https://api.planningcenteronline.com/services/v2/service_types/${team.id}/plans/${firstPlan.id}/team_members?per_page=100`,
       {
         headers: {
           Authorization: `Basic ${credentials}`,
