@@ -70,7 +70,7 @@ export default async function handler(req, res) {
 
     // Read-only test of Planning Center connectivity.
     const pcResponse = await fetch(
-      "https://api.planningcenteronline.com/people/v2/me",
+    "https://api.planningcenteronline.com/services/v2/service_types?per_page=1",
       {
         headers: {
           Authorization: `Basic ${credentials}`,
