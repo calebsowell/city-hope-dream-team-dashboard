@@ -108,7 +108,34 @@ const schedules = await Promise.all(
     }
 
     const result = await response.json();
+if (team.id === "1770310") {
+  const firstPlan = (result.data || [])[0];
 
+  if (firstPlan) {
+    const assignmentsResponse = await fetch(
+      `https://api.planningcenteronline.com/services/v2/service_types/${team.id}/plans/${firstPlan.id}/team_members?per_page=1`,
+      {
+        headers: {
+          Authorization: `Basic ${credentials}`,
+          Accept: "application/json"
+        }
+      }
+    );
+
+    if (!assignmentsResponse.ok) {
+      throw new Error(
+        `Volunteer assignments request failed: ${assignmentsResponse.status}`
+      );
+    }
+
+    const assignments = await assignmentsResponse.json();
+
+    console.log("Volunteer assignment API test:", {
+      planId: firstPlan.id,
+      recordsReturned: assignments.data?.length ?? 0
+    });
+  }
+}
     return {
       team: team.name,
       serviceTypeId: team.id,
