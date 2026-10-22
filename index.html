@@ -103,22 +103,37 @@ async function testPlanningCenterConnection() {
     if (response.ok) {
   const counts = data.planCounts || [];
 
-  result.innerHTML = `
-    <strong>Planning Center Connected!</strong>
-    <div style="margin-top:10px;">
-      ${counts.map(team => `
-        <div style="margin-bottom:8px;">
-          <strong>${team.team}</strong>
-          <div>${team.count} plans retrieved</div>
-        </div>
-      `).join("")}
-    </div>
-  `;
+const ministry = (data.schedules || []).find(
+  (team) => team.serviceTypeId === "1770310"
+);
+
+const assignmentCount = ministry?.assignmentTest?.recordsReturned;
+const morePages = ministry?.assignmentTest?.hasMorePages;
+const pagesFetched = ministry?.assignmentTest?.pagesFetched;
+
+result.innerHTML = `
+  <strong>Planning Center Connected!</strong>
+
+  <div style="margin-top:10px;">
+    ${counts.map(team => `
+      <div style="margin-bottom:8px;">
+        <strong>${team.team}</strong>
+        <div>${team.count} plans retrieved</div>
+      </div>
+    `).join("")}
+  </div>
+
+  <div style="margin-top:12px;">
+    <strong>Ministry Team Volunteer Assignments</strong>
+    <div>${assignmentCount ?? "Not available"} assignments retrieved</div>
+    <div>${pagesFetched ?? 0} pages fetched</div>
+    ${morePages ? "<div>More pages remain</div>" : ""}
+  </div>
+`;
 } else {
   result.textContent =
     `Connection error: ${data.error || response.status}`;
 }
-
   } catch (error) {
     result.textContent = "Connection test failed.";
   } finally {
