@@ -143,9 +143,10 @@ if (team.id === "1770310") {
   }
 }
     return {
-      team: team.name,
-      serviceTypeId: team.id,
-      plans: (result.data || []).map((plan) => ({
+  team: team.name,
+  serviceTypeId: team.id,
+  assignmentTest: team.assignmentTest || null,
+  plans: (result.data || []).map((plan) => ({
         id: plan.id,
         dates: plan.attributes.dates,
         sortDate: plan.attributes.sort_date
