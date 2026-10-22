@@ -110,6 +110,7 @@ const ministry = (data.schedules || []).find(
 const assignmentCount = ministry?.assignmentTest?.recordsReturned;
 const morePages = ministry?.assignmentTest?.hasMorePages;
 const pagesFetched = ministry?.assignmentTest?.pagesFetched;
+      const availableFields = ministry?.assignmentTest?.availableFields || [];
 const assignmentPlanId = ministry?.assignmentTest?.planId;
 
 const assignmentPlan = (ministry?.plans || []).find(
