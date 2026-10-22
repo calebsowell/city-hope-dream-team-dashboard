@@ -86,10 +86,18 @@ export default async function handler(req, res) {
       });
     }
 
-    return res.status(200).json({
-      connected: true,
-      message: "Planning Center connection successful"
-    });
+  const planningCenterData = await pcResponse.json();
+
+const serviceTypes = planningCenterData.data.map((item) => ({
+  id: item.id,
+  name: item.attributes.name
+}));
+
+return res.status(200).json({
+  connected: true,
+  message: "Planning Center connection successful",
+  serviceTypes
+});
 
   } catch (error) {
     console.error("Planning Center connection test failed:", error);
