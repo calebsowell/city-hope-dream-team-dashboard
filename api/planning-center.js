@@ -69,34 +69,62 @@ export default async function handler(req, res) {
     ).toString("base64");
 
     // Read-only test of Planning Center connectivity.
-    const pcResponse = await fetch(
-"https://api.planningcenteronline.com/services/v2/service_types?per_page=100",
-      {
-        headers: {
-          Authorization: `Basic ${credentials}`,
-          Accept: "application/json"
-        }
-      }
+  // Retrieve recent and upcoming Sunday plans for both Burk teams.
+const teams = [
+  { id: "1770310", name: "Weekend Ministry Teams – Burk Campus" },
+  { id: "1770597", name: "Burk Creative Teams" }
+];
+
+const today = new Date();
+const startDate = new Date(today);
+startDate.setUTCDate(startDate.getUTCDate() - 28);
+
+const formatDate = (date) => date.toISOString().slice(0, 10);
+
+const schedules = await Promise.all(
+  teams.map(async (team) => {
+    const url = new URL(
+      `https://api.planningcenteronline.com/services/v2/service_types/${team.id}/plans`
     );
 
-    if (!pcResponse.ok) {
-      return res.status(502).json({
-        error: "Planning Center connection unsuccessful",
-        upstreamStatus: pcResponse.status
-      });
+    url.searchParams.set(
+      "filter",
+      "after"
+    );
+    url.searchParams.set("after", formatDate(startDate));
+    url.searchParams.set("per_page", "100");
+
+    const response = await fetch(url.toString(), {
+      headers: {
+        Authorization: `Basic ${credentials}`,
+        Accept: "application/json"
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Planning Center plans request failed for ${team.id}: ${response.status}`
+      );
     }
 
-  const planningCenterData = await pcResponse.json();
+    const result = await response.json();
 
-const serviceTypes = planningCenterData.data.map((item) => ({
-  id: item.id,
-  name: item.attributes.name
-}));
+    return {
+      team: team.name,
+      serviceTypeId: team.id,
+      plans: (result.data || []).map((plan) => ({
+        id: plan.id,
+        dates: plan.attributes.dates,
+        sortDate: plan.attributes.sort_date
+      }))
+    };
+  })
+);
 
 return res.status(200).json({
   connected: true,
-  message: "Planning Center connection successful",
-  serviceTypes
+  message: "Burkburnett plans retrieved",
+  schedules
 });
 
   } catch (error) {
