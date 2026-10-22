@@ -70,4 +70,56 @@ async function showSession(session){
   authScreen.hidden = true;
   document.getElementById('authStatus').textContent = session.user.email || '';
 }
-</script></body></html>
+</script>
+
+<script>
+async function testPlanningCenterConnection() {
+  const button = document.getElementById("pc-test-button");
+  const result = document.getElementById("pc-test-result");
+
+  button.disabled = true;
+  result.textContent = "Testing connection...";
+
+  try {
+    const key = Object.keys(localStorage).find(
+      k => k.startsWith("sb-") && k.endsWith("-auth-token")
+    );
+
+    const session = JSON.parse(localStorage.getItem(key) || "null");
+
+    if (!session?.access_token) {
+      result.textContent = "Please sign in first.";
+      return;
+    }
+
+    const response = await fetch("/api/planning-center", {
+      headers: {
+        Authorization: `Bearer ${session.access_token}`
+      }
+    });
+
+    const data = await response.json();
+
+    result.textContent = response.ok
+      ? "Connected successfully to Planning Center!"
+      : `Connection error: ${data.error || response.status}`;
+
+  } catch (error) {
+    result.textContent = "Connection test failed.";
+  } finally {
+    button.disabled = false;
+  }
+}
+</script>
+
+<div style="position:fixed;bottom:20px;right:20px;z-index:9999;background:white;color:#222;padding:15px;border:1px solid #ccc;border-radius:10px;box-shadow:0 4px 12px #0002;">
+  <button
+    id="pc-test-button"
+    onclick="testPlanningCenterConnection()"
+    style="background:#164b73;color:white;padding:10px;border:0;border-radius:6px;cursor:pointer;"
+  >
+    Test Planning Center Connection
+  </button>
+  <div id="pc-test-result" style="margin-top:8px;font-size:13px;"></div>
+</div>
+</body></html>
