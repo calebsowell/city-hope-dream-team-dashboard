@@ -124,6 +124,10 @@ const schedules = await Promise.all(
 return res.status(200).json({
   connected: true,
   message: "Burkburnett plans retrieved",
+  planCounts: schedules.map((team) => ({
+    team: team.team,
+    count: team.plans.length
+  })),
   schedules
 });
 
