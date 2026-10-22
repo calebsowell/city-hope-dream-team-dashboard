@@ -110,7 +110,14 @@ const ministry = (data.schedules || []).find(
 const assignmentCount = ministry?.assignmentTest?.recordsReturned;
 const morePages = ministry?.assignmentTest?.hasMorePages;
 const pagesFetched = ministry?.assignmentTest?.pagesFetched;
+const assignmentPlanId = ministry?.assignmentTest?.planId;
 
+const assignmentPlan = (ministry?.plans || []).find(
+  (plan) => plan.id === assignmentPlanId
+);
+
+const assignmentPlanDate =
+  assignmentPlan?.dates || assignmentPlan?.sortDate || "Unknown date";
 result.innerHTML = `
   <strong>Planning Center Connected!</strong>
 
