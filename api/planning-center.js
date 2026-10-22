@@ -109,9 +109,23 @@ const schedules = await Promise.all(
 
     const result = await response.json();
 if (team.id === "1770310") {
-  const firstPlan = (result.data || [])[0];
+ const todayString = new Date().toISOString().slice(0, 10);
 
-  if (firstPlan) {
+const sundayPlans = (result.data || [])
+  .filter((plan) => {
+    const date = plan.attributes?.sort_date?.slice(0, 10);
+    if (!date) return false;
+
+    const day = new Date(`${date}T12:00:00Z`).getUTCDay();
+    return day === 0 && date <= todayString;
+  })
+  .sort((a, b) =>
+    b.attributes.sort_date.localeCompare(a.attributes.sort_date)
+  );
+
+const firstPlan = sundayPlans[0];
+
+if (firstPlan) {
     const assignmentsResponse = await fetch(
       `https://api.planningcenteronline.com/services/v2/service_types/${team.id}/plans/${firstPlan.id}/team_members?per_page=100`,
       {
