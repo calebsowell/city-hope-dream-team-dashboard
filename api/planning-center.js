@@ -170,13 +170,18 @@ while (nextPage && pagesFetched < 20) {
 
 team.assignmentTest = {
   planId: firstPlan.id,
-  recordsReturned: allAssignments.length,
-  pagesFetched,
-  hasMorePages: Boolean(nextPage),
-  availableFields: Object.keys(allAssignments[0]?.attributes || {}),
-  responseStatuses: allAssignments.map((member) => ({
-    status: member.attributes?.status || "unknown"
-  }))
+recordsReturned: allAssignments.length,
+pagesFetched,
+hasMorePages: Boolean(nextPage),
+availableFields: Object.keys(allAssignments[0]?.attributes || {}),
+responseStatuses: allAssignments.map((member) => ({
+  status: member.attributes?.status || "unknown"
+})),
+statusCounts: allAssignments.reduce((counts, member) => {
+  const status = member.attributes?.status || "unknown";
+  counts[status] = (counts[status] || 0) + 1;
+  return counts;
+}, {})
 };
   }
 }
