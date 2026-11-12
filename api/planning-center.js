@@ -1,6 +1,7 @@
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_PUBLISHABLE_KEY;
+// Development branch: weekly Dream Team reporting prototype.
 
 export default async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
