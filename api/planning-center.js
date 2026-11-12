@@ -120,7 +120,7 @@ const sundayPlans = (result.data || [])
  return day === 0 && date > todayString;
   })
   .sort((a, b) =>
-    b.attributes.sort_date.localeCompare(a.attributes.sort_date)
+  a.attributes.sort_date.localeCompare(b.attributes.sort_date)
   );
 
 const firstPlan = sundayPlans[0];
