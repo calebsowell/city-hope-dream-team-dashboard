@@ -117,7 +117,7 @@ const sundayPlans = (result.data || [])
     if (!date) return false;
 
     const day = new Date(`${date}T12:00:00Z`).getUTCDay();
-    return day === 0 && date <= todayString;
+ return day === 0 && date > todayString;
   })
   .sort((a, b) =>
     b.attributes.sort_date.localeCompare(a.attributes.sort_date)
