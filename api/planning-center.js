@@ -108,7 +108,7 @@ const schedules = await Promise.all(
     }
 
     const result = await response.json();
-if (team.id === "1770310") {
+if (team.id === "1770310" || team.id === "1770597") {
  const todayString = new Date().toISOString().slice(0, 10);
 
 const sundayPlans = (result.data || [])
